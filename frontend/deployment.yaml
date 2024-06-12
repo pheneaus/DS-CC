@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-image-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-image
+  template:
+    metadata:
+      labels:
+        app: frontend-image
+    spec:
+      containers:
+      - name: frontend-container
+        image: gcr.io/aman-project-426023/frontend-image:latest
+      imagePullSecrets:
+      - name:  gcr-json-key  # Check if tachis secret key exists in the namespace

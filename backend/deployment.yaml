@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-image-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-image
+  template:
+    metadata:
+      labels:
+        app: backend-image
+    spec:
+      containers:
+      - name: mybackend-image-container
+        image: gcr.io/aman-project-426023/backend-image:latest
+        env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: mydb-credentials 
+              key: DB_HOST
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mydb-credentials 
+              key: DB_NAME
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: mydb-credentials 
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mydb-credentials 
+              key: DB_PASSWORD
+        - name: DB_PORT
+          value: "5432"  # Modify the database port as per your database configuration
+      imagePullSecrets:
+      - name: gcr-json-key
