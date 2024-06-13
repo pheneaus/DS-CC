@@ -1,4 +1,5 @@
-steps:
+# cloudbuild.yaml
+
 # Step 1: Build the backend image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/aman-project-426023/backend-image:latest', './backend']
@@ -21,33 +22,37 @@ steps:
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['apply', '-f', './backend/deployment.yaml']
   env:
-  - 'CLOUDSDK_COMPUTE_ZONE=$COMPUTE_ZONE'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=$CLUSTER_NAME'
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
 
 # Step 6: Deploy frontend to Kubernetes
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['apply', '-f', './frontend/deployment.yaml']
   env:
-  - 'CLOUDSDK_COMPUTE_ZONE=$COMPUTE_ZONE'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=$CLUSTER_NAME'
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
 
 # Step 7: Expose the backend service
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['expose', 'deployment', 'backend-image-deployment', '--type=LoadBalancer', '--name=backend-service', '--port=5000', '--target-port=5000']
   env:
-  - 'CLOUDSDK_COMPUTE_ZONE=$COMPUTE_ZONE'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=$CLUSTER_NAME'
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
 
 # Step 8: Expose the frontend service
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['expose', 'deployment', 'frontend-image-deployment', '--type=LoadBalancer', '--name=frontend-service', '--port=80', '--target-port=80']
   env:
-  - 'CLOUDSDK_COMPUTE_ZONE=$COMPUTE_ZONE'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=$CLUSTER_NAME'
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
 
 timeout: '1200s'
 
+# Substitutions for dynamic values
+substitutions:
+  _COMPUTE_ZONE: 'us-central1-a'
+  _CLUSTER_NAME: 'aman'
 
 images:
-- 'gcr.io/aman-project-426023/backend-image:latest'
-- 'gcr.io/aman-project-426023/frontend-image:latest'
+  - 'gcr.io/$PROJECT_ID/backend-image:latest'
+  - 'gcr.io/$PROJECT_ID/frontend-image:latest'
