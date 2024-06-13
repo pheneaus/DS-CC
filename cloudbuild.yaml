@@ -54,5 +54,5 @@ substitutions:
   _CLUSTER_NAME: 'aman'
 
 images:
-  - 'gcr.io/$PROJECT_ID/backend-image:latest'
-  - 'gcr.io/$PROJECT_ID/frontend-image:latest'
+  - 'gcr.io/aman-project-426023/backend-image:latest'
+  - 'gcr.io/aman-project-426023/frontend-image:latest'
