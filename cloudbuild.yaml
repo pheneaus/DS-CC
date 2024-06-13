@@ -1,5 +1,3 @@
-# cloudbuild.yaml
-
 # Step 1: Build the backend image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/aman-project-426023/backend-image:latest', './backend']
@@ -53,6 +51,7 @@ substitutions:
   _COMPUTE_ZONE: 'us-central1-a'
   _CLUSTER_NAME: 'aman'
 
+# Images to be deployed (optional, for tracking purposes)
 images:
   - 'gcr.io/aman-project-426023/backend-image:latest'
   - 'gcr.io/aman-project-426023/frontend-image:latest'
