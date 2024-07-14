@@ -47,7 +47,7 @@ steps:
       - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
       - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
 
-timeout: '1200s'
+timeout: '1100s'
 
 # Substitutions for dynamic values
 substitutions:
