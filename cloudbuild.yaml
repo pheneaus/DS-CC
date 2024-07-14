@@ -1,4 +1,5 @@
-logsBucket: gs://pheneaus-bucket  # Replace 'pheneaus-bucket' with your actual bucket name
+# Replace 'pheneaus-bucket' with your actual bucket name
+logsBucket: gs://pheneaus-bucket
 
 steps:
   # Step 1: Build the frontend image
@@ -34,6 +35,7 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
       - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
+
 # Step 7: Expose the backend service (if not exists)
 - name: 'gcr.io/cloud-builders/kubectl'
   args:
