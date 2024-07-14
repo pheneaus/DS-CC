@@ -1,35 +1,36 @@
-logsBucket: gs://pheneaus-bucket # Replace 'your-logs-bucket' with your actual bucket name
+logsBucket: gs://pheneaus-bucket  # Replace 'pheneaus-bucket' with your actual bucket name
 
 steps:
-
-  # Step 3: Build the frontend image
+  # Step 1: Build the frontend image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/aman-project-426023/frontend-image:latest', './frontend']
-    dir: 'frontend'
+    args: ['build', '-t', 'gcr.io/aman-project-426023/frontend-image:latest', '.']
+    dir: 'frontend'  # Ensure this points to the correct directory
 
-  # Step 4: Push the frontend image to Google Container Registry
+  # Step 2: Push the frontend image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/aman-project-426023/frontend-image:latest']
-    
-  # Step 1: Build the backend image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/aman-project-426023/backend-image:latest', './backend']
-    dir: 'backend'
 
-  # Step 2: Push the backend image to Google Container Registry
+  # Step 3: Build the backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/aman-project-426023/backend-image:latest', '.']
+    dir: 'backend'  # Ensure this points to the correct directory
+
+  # Step 4: Push the backend image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/aman-project-426023/backend-image:latest']
 
   # Step 5: Deploy backend to Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', './backend/deployment.yaml']
+    args: ['apply', '-f', 'deployment.yaml']
+    dir: 'backend'  # Ensure this points to the correct directory
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
       - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
 
   # Step 6: Deploy frontend to Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', './frontend/deployment.yaml']
+    args: ['apply', '-f', 'deployment.yaml']
+    dir: 'frontend'  # Ensure this points to the correct directory
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
       - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
