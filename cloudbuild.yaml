@@ -1,3 +1,6 @@
+logsBucket: gs://pheneaus-bucket # Replace 'your-logs-bucket' with your actual bucket name
+
+
 steps:
   # Step 1: Build the backend image
   - name: 'gcr.io/cloud-builders/docker'
