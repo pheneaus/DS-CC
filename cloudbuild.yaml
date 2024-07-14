@@ -52,7 +52,7 @@ steps:
         metadata:
           name: backend-service
           labels:
-            app: backend
+            app: backend-image
         spec:
           type: LoadBalancer
           selector:
@@ -77,7 +77,7 @@ steps:
         metadata:
           name: frontend-service
           labels:
-            app: frontend
+            app: frontend-image
         spec:
           type: LoadBalancer
           selector:
