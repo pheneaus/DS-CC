@@ -38,10 +38,11 @@ steps:
 
   # Step 7: Expose the backend service (if not exists)
   - name: 'gcr.io/cloud-builders/kubectl'
+    entrypoint: 'bash'
     args:
-      - apply
-      - -f
-      - <(echo '
+      - '-c'
+      - |
+        echo '
         apiVersion: v1
         kind: Service
         metadata:
@@ -55,17 +56,18 @@ steps:
           ports:
           - port: 5000
             targetPort: 5000
-        ')
+        ' | kubectl apply -f -
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
       - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
 
   # Step 8: Expose the frontend service (if not exists)
   - name: 'gcr.io/cloud-builders/kubectl'
+    entrypoint: 'bash'
     args:
-      - apply
-      - -f
-      - <(echo '
+      - '-c'
+      - |
+        echo '
         apiVersion: v1
         kind: Service
         metadata:
@@ -79,7 +81,7 @@ steps:
           ports:
           - port: 80
             targetPort: 80
-        ')
+        ' | kubectl apply -f -
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
       - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
