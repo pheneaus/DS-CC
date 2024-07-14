@@ -20,7 +20,29 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/aman-project-426023/backend-image:latest']
 
-  # Step 5: Deploy backend to Kubernetes
+  # Step 5: Delete existing backend deployment and then apply new configuration
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'delete'
+      - '-f'
+      - 'backend/deployment.yaml'  # Replace with your backend deployment file path
+      - '--ignore-not-found=true'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
+      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
+
+  # Step 6: Delete existing frontend deployment and then apply new configuration
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'delete'
+      - '-f'
+      - 'frontend/deployment.yaml'  # Replace with your frontend deployment file path
+      - '--ignore-not-found=true'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
+      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
+
+  # Step 7: Deploy backend to Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - 'apply'
@@ -30,7 +52,7 @@ steps:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
       - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
 
-  # Step 6: Deploy frontend to Kubernetes
+  # Step 8: Deploy frontend to Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - 'apply'
@@ -40,7 +62,7 @@ steps:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
       - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
 
-  # Step 7: Expose the backend service (if not exists)
+  # Step 9: Expose the backend service (if not exists)
   - name: 'gcr.io/cloud-builders/kubectl'
     entrypoint: 'bash'
     args:
@@ -65,7 +87,7 @@ steps:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
       - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
 
-  # Step 8: Expose the frontend service (if not exists)
+  # Step 10: Expose the frontend service (if not exists)
   - name: 'gcr.io/cloud-builders/kubectl'
     entrypoint: 'bash'
     args:
