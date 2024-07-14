@@ -1,14 +1,6 @@
 logsBucket: gs://pheneaus-bucket # Replace 'your-logs-bucket' with your actual bucket name
 
 steps:
-  # Step 1: Build the backend image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/aman-project-426023/backend-image:latest', './backend']
-    dir: 'backend'
-
-  # Step 2: Push the backend image to Google Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/aman-project-426023/backend-image:latest']
 
   # Step 3: Build the frontend image
   - name: 'gcr.io/cloud-builders/docker'
@@ -18,6 +10,15 @@ steps:
   # Step 4: Push the frontend image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/aman-project-426023/frontend-image:latest']
+    
+  # Step 1: Build the backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/aman-project-426023/backend-image:latest', './backend']
+    dir: 'backend'
+
+  # Step 2: Push the backend image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/aman-project-426023/backend-image:latest']
 
   # Step 5: Deploy backend to Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
