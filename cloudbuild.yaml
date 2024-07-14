@@ -1,4 +1,4 @@
-# Replace 'pheneaus-bucket' with your actual bucket name
+# Replace '<your-bucket-name>' with your actual bucket name
 logsBucket: gs://pheneaus-bucket
 
 steps:
@@ -22,19 +22,23 @@ steps:
 
   # Step 5: Deploy backend to Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'deployment.yaml']
-    dir: 'backend'  # Ensure this points to the correct directory
+    args:
+      - 'apply'
+      - '-f'
+      - 'backend/deployment.yaml'  # Replace with your backend deployment file path
     env:
-      - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
+      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
 
   # Step 6: Deploy frontend to Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'deployment.yaml']
-    dir: 'frontend'  # Ensure this points to the correct directory
+    args:
+      - 'apply'
+      - '-f'
+      - 'frontend/deployment.yaml'  # Replace with your frontend deployment file path
     env:
-      - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
+      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
 
   # Step 7: Expose the backend service (if not exists)
   - name: 'gcr.io/cloud-builders/kubectl'
@@ -58,8 +62,8 @@ steps:
             targetPort: 5000
         ' | kubectl apply -f -
     env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
+      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
 
   # Step 8: Expose the frontend service (if not exists)
   - name: 'gcr.io/cloud-builders/kubectl'
@@ -83,5 +87,5 @@ steps:
             targetPort: 80
         ' | kubectl apply -f -
     env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Replace with your actual compute zone
+      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'      # Replace with your actual cluster name
