@@ -34,29 +34,50 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
       - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
+# Step 7: Expose the backend service (if not exists)
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+    - apply
+    - -f
+    - <(echo '
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: backend-service
+        labels:
+          app: backend
+      spec:
+        type: LoadBalancer
+        selector:
+          app: backend-image-deployment
+        ports:
+        - port: 5000
+          targetPort: 5000
+      ')
+  env:
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
 
-  # Step 7: Expose the backend service
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['expose', 'deployment', 'backend-image-deployment', '--type=LoadBalancer', '--name=backend-service', '--port=5000', '--target-port=5000']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
-
-  # Step 8: Expose the frontend service
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['expose', 'deployment', 'frontend-image-deployment', '--type=LoadBalancer', '--name=frontend-service', '--port=80', '--target-port=80']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
-
-timeout: '1200s'
-
-# Substitutions for dynamic values
-substitutions:
-  _COMPUTE_ZONE: 'us-central1-a'
-  _CLUSTER_NAME: 'aman'
-
-# Images to be deployed (optional, for tracking purposes)
-images:
-  - 'gcr.io/aman-project-426023/backend-image:latest'
-  - 'gcr.io/aman-project-426023/frontend-image:latest'
+# Step 8: Expose the frontend service (if not exists)
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+    - apply
+    - -f
+    - <(echo '
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: frontend-service
+        labels:
+          app: frontend
+      spec:
+        type: LoadBalancer
+        selector:
+          app: frontend-image-deployment
+        ports:
+        - port: 80
+          targetPort: 80
+      ')
+  env:
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
