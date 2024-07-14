@@ -58,8 +58,8 @@ steps:
             targetPort: 5000
         ' | kubectl apply -f -
     env:
-      - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'
 
   # Step 8: Expose the frontend service (if not exists)
   - name: 'gcr.io/cloud-builders/kubectl'
@@ -83,5 +83,5 @@ steps:
             targetPort: 80
         ' | kubectl apply -f -
     env:
-      - 'CLOUDSDK_COMPUTE_ZONE='us-central1-a'
-      - 'CLOUDSDK_CONTAINER_CLUSTER='aman'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=aman'
