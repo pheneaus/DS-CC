@@ -56,7 +56,7 @@ steps:
         spec:
           type: LoadBalancer
           selector:
-            app: backend-image-deployment
+            app: backend-image
           ports:
           - port: 5000
             targetPort: 5000
@@ -81,7 +81,7 @@ steps:
         spec:
           type: LoadBalancer
           selector:
-            app: frontend-image-deployment
+            app: frontend-image
           ports:
           - port: 80
             targetPort: 80
